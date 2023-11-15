@@ -1,0 +1,495 @@
+{
+	"info": {
+		"_postman_id": "5d586c39-f139-41ee-9640-8008430d052d",
+		"name": "Dummy social media app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28166921"
+	},
+	"item": [
+		{
+			"name": "posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"let reHeaders;\r",
+							"\r",
+							"pm.test('Should verify response status code [200 OK]', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response time is below [900 ms]', () => {\r",
+							"    pm.response.to.have.responseTime.below(900);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response time is below [900 ms] - CHAI', () => {\r",
+							"    pm.expect(pm.response.responseTime).to.below(900);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [Date] response header exist - CHAI', () => {\r",
+							"    resHeaders = pm.response.headers;\r",
+							"    pm.expect(resHeaders.get('date')).to.exist;\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if all required headers are exist', () => {\r",
+							"    pm.response.to.have.header('Date');\r",
+							"    pm.response.to.have.header('Content-Type');\r",
+							"    pm.response.to.have.header('Transfer-Encoding');\r",
+							"    pm.response.to.have.header('Connection');\r",
+							"    pm.response.to.have.header('Vary');\r",
+							"    pm.response.to.have.header('Content-Encoding');\r",
+							"    pm.response.to.have.header('ETag');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if all required response headers have valid values', () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+							"    pm.expect(resHeaders.get('Transfer-Encoding')).to.eql('chunked');\r",
+							"    pm.expect(resHeaders.get('Connection')).to.eql('keep-alive');\r",
+							"    pm.expect(resHeaders.get('Vary')).to.eql('Accept-Encoding');\r",
+							"    pm.expect(resHeaders.get('Content-Encoding')).to.eql('gzip');\r",
+							"    pm.expect(resHeaders.get('ETag')).to.include('W/\"4ed-');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [body] properties exist', () => {\r",
+							"    resBody.map(index => {\r",
+							"        console.log(index.body);\r",
+							"        pm.expect(index.body).to.exist;\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"pm.test('Set collection \"body\" variable with [body] property value from post id = 1', () => {\r",
+							"    console.log(resBody);\r",
+							"    pm.expect(resBody[0].body).to.exist;\r",
+							"    pm.collectionVariables.set('body', resBody[0].body);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/posts",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "GET posts - settings",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/posts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"userId\": 1,\n        \"id\": 1,\n        \"title\": \"sunt aut facere repellat provident occaecati excepturi optio reprehenderit\",\n        \"body\": \"quia et suscipit nsuscipit recusandae consequuntur expedita et cum nreprehenderit molestiae ut ut quas totam nnostrum rerum est autem sunt rem eveniet architecto\"\n    },\n    {\n        \"userId\": 1,\n        \"id\": 2,\n        \"title\": \"qui est esse\",\n        \"body\": \"est rerum tempore vitae\\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\\nqui aperiam non debitis possimus qui neque nisi nulla\"\n    },\n    {\n        \"userId\": 1,\n        \"id\": 3,\n        \"title\": \"ea molestias quasi exercitationem repellat qui ipsa sit aut\",\n        \"body\": \"et iusto sed quo iure\\nvoluptatem occaecati omnis eligendi aut ad\\nvoluptatem doloribus vel accusantium quis pariatur\\nmolestiae porro eius odio et labore et velit aut\"\n    },\n    {\n        \"userId\": 1,\n        \"id\": 4,\n        \"title\": \"eum et est occaecati\",\n        \"body\": \"ullam et saepe reiciendis voluptatem adipisci\\nsit amet autem assumenda provident rerum culpa\\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\\nquis sunt voluptatem rerum illo velit\"\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test('Should verify if server response status code is [201 Created]', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(201);\r",
+							"    pm.expect(pm.response.status).to.eql('Created');\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response time is below [900 ms]', () => {\r",
+							"    pm.expect(pm.response.responseTime).to.below(900);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response size is below [1000 B]', () => {\r",
+							"    pm.expect(pm.response.responseSize).to.below(1000);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if all required response body properties exist', () => {\r",
+							"    pm.expect(resBody.created).to.exist;\r",
+							"    pm.expect(resBody.postId).to.exist;\r",
+							"    pm.expect(resBody.id).to.exist;\r",
+							"    pm.expect(resBody.name).to.exist;\r",
+							"    pm.expect(resBody.email).to.exist;\r",
+							"    pm.expect(resBody.body).to.exist;\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [created] body property have [true] value', () => {\r",
+							"    pm.expect(resBody.created).to.eql(true);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [postId] and [id] body properties values are a numbers', () => {\r",
+							"    pm.expect(resBody.postId).to.be.a('number');\r",
+							"    pm.expect(resBody.id).to.be.a('number');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [name] body property value is a string', () => {\r",
+							"    pm.expect(resBody.name).to.be.a('string');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [email] body property value include [@] character', () => {\r",
+							"    pm.expect(resBody.email).to.include('@');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [body] property value is a string and have more than 10 characters', () => {\r",
+							"    pm.expect(resBody.body).to.be.a('string');\r",
+							"    pm.expect(resBody.body).length.to.be.greaterThan(10);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [body] property value is equal to [body] collection variable', () => {\r",
+							"    pm.expect(resBody.body).to.eql(pm.collectionVariables.get('body'));\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"postId\": 1,\r\n    \"id\": 1,\r\n    \"name\": \"Janina Nowak\",\r\n    \"email\": \"janina.nowak@example.com\",\r\n    \"body\": \"{{body}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/comments",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"comments"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "POST comments - settings",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"postId\": 1,\r\n    \"id\": 1,\r\n    \"name\": \"Janina Nowak\",\r\n    \"email\": \"janina.nowak@example.com\",\r\n    \"body\": \"quia et suscipit nsuscipit recusandae consequuntur expedita et cum nreprehenderit molestiae ut ut quas totam nnostrum rerum est autem sunt rem eveniet architecto\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/comments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"created\": true,\r\n    \"postId\": 1,\r\n    \"id\": 1,\r\n    \"name\": \"Janina Nowak\",\r\n    \"email\": \"janina.nowak@example.com\",\r\n    \"body\": \"quia et suscipit nsuscipit recusandae consequuntur expedita et cum nreprehenderit molestiae ut ut quas totam nnostrum rerum est autem sunt rem eveniet architecto\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "users/1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test('Should verify if server response status code is [202 Accepted]', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(202);\r",
+							"    pm.expect(pm.response.status).to.eql('Accepted');\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response time is below [900 ms]', () => {\r",
+							"    pm.expect(pm.response.responseTime).to.below(900);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response size is below [1200 B]', () => {\r",
+							"    pm.expect(pm.response.responseSize).to.below(1200);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if all required response body properties exist', () => {\r",
+							"    pm.expect(resBody.created).to.exist;\r",
+							"    pm.expect(resBody.id).to.exist;\r",
+							"    pm.expect(resBody.name).to.exist;\r",
+							"    pm.expect(resBody.username).to.exist;\r",
+							"    pm.expect(resBody.email).to.exist;\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [created] body property have [true] value', () => {\r",
+							"    pm.expect(resBody.created).to.eql(true);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [id] body property value is a numbers', () => {\r",
+							"    pm.expect(resBody.id).to.be.a('number');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [name] and [username] body properties values are a strings', () => {\r",
+							"    pm.expect(resBody.name).to.be.a('string');\r",
+							"    pm.expect(resBody.username).to.be.a('string');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [email] body property value include [@] character', () => {\r",
+							"    pm.expect(resBody.email).to.include('@');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [catchPhrase] property value is a string and have more than 10 characters', () => {\r",
+							"    pm.expect(resBody.company.catchPhrase).to.be.a('string');\r",
+							"    pm.expect(resBody.company.catchPhrase).length.to.be.greaterThan(10);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 11,\n    \"name\": \"Bożydar Shepard\",\n    \"username\": \"N7\",\n    \"email\": \"shepard@normandy.com\",\n    \"address\": {\n        \"street\": \"Liara's Street\",\n        \"suite\": \"Apt. 556\",\n        \"city\": \"Citadel\",\n        \"zipcode\": \"92998-3874\",\n        \"geo\": {\n            \"lat\": \"-37.3159\",\n            \"lng\": \"81.1496\"\n        }\n    },\n    \"phone\": \"1-770-736-8031 x56442\",\n    \"website\": \"www.normandy-sr2.com\",\n    \"company\": {\n        \"name\": \"N7 - Normandy SR2\",\n        \"catchPhrase\": \"Protecting the galaxy, people and all beings.\",\n        \"bs\": \"`I'm commandor Shperad and this my favourite website in the galaxy.`\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "PUT users - settings",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 11,\n    \"name\": \"Bożydar Shepard\",\n    \"username\": \"N7\",\n    \"email\": \"shepard@normandy.com\",\n    \"address\": {\n        \"street\": \"Liara's Street\",\n        \"suite\": \"Apt. 556\",\n        \"city\": \"Citadel\",\n        \"zipcode\": \"92998-3874\",\n        \"geo\": {\n            \"lat\": \"-37.3159\",\n            \"lng\": \"81.1496\"\n        }\n    },\n    \"phone\": \"1-770-736-8031 x56442\",\n    \"website\": \"www.normandy-sr2.com\",\n    \"company\": {\n        \"name\": \"N7 - Normandy SR2\",\n        \"catchPhrase\": \"Protecting the galaxy, people and all beings.\",\n        \"bs\": \"`I'm commandor Shperad and this my favourite website in the galaxy.`\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"status": "Accepted",
+					"code": 202,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"created\": true,\r\n    \"id\": 11,\r\n    \"name\": \"Bożydar Shepard\",\r\n    \"username\": \"N7\",\r\n    \"email\": \"shepard@normandy.com\",\r\n    \"address\": {\r\n        \"street\": \"Liara's Street\",\r\n        \"suite\": \"Apt. 556\",\r\n        \"city\": \"Citadel\",\r\n        \"zipcode\": \"92998-3874\",\r\n        \"geo\": {\r\n            \"lat\": \"-37.3159\",\r\n            \"lng\": \"81.1496\"\r\n        }\r\n    },\r\n    \"phone\": \"1-770-736-8031 x56442\",\r\n    \"website\": \"www.normandy-sr2.com\",\r\n    \"company\": {\r\n        \"name\": \"N7 - Normandy SR2\",\r\n        \"catchPhrase\": \"Protecting the galaxy, people and all beings.\",\r\n        \"bs\": \"`I'm commandor Shperad and this my favourite website in the galaxy.`\"\r\n    }\r\n}"
+				}
+			]
+		},
+		{
+			"name": "albums/1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Should verify if server response status code is [200 OK]', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql('OK');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response time is below [900 ms]', () => {\r",
+							"    pm.expect(pm.response.responseTime).to.below(900);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response size is below [1000 B]', () => {\r",
+							"    pm.expect(pm.response.responseSize).to.below(1000);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [deleted] body property value is [true]', () => {\r",
+							"    const resBody = pm.response.json();\r",
+							"    pm.expect(resBody.deleted).to.eql(true);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [albumId] body property value is a [number]', () => {\r",
+							"    const resBody = pm.response.json();\r",
+							"    pm.expect(resBody.albumId).to.be.a('number');\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/albums/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"albums",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "DELETE albums - settings",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/albums/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"albums",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"deleted\": true,\r\n    \"albumId\": 1,\r\n    \"albumOwner\": \"Liara T.\",\r\n    \"albumName\": \"Trip to the Citadel\",\r\n    \"quantity\": 25\r\n}"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://a1f2c864-b78a-4a17-acd1-28df7944e5ee.mock.pstmn.io"
+		},
+		{
+			"key": "body",
+			"value": ""
+		}
+	]
+}
