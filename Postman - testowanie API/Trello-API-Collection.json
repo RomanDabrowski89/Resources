@@ -1,0 +1,709 @@
+{
+	"info": {
+		"_postman_id": "16425588-37d3-415d-8b50-802427e80756",
+		"name": "Trello API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28166921"
+	},
+	"item": [
+		{
+			"name": "Create a Board",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function boardNameGenerator(){\r",
+							"    const randomNumbers = Math.floor(Math.random() * (1000000 - 1) + 1);\r",
+							"    const randomBoardName = \"Tablica z Postman \" + randomNumbers;\r",
+							"    pm.collectionVariables.set(\"boardNameGenerator\", randomBoardName);\r",
+							"}\r",
+							"boardNameGenerator();"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"    console.log(resBody);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if created board [name] is equal to [boardNameGenerator] collection variable\", () => {\r",
+							"    const expectedName = pm.collectionVariables.get(\"boardNameGenerator\");\r",
+							"    pm.expect(resBody.name).to.eql(expectedName);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if created board [id] length is greater than 10 characters\", () => {\r",
+							"    pm.expect(resBody.id.length).to.be.greaterThan(10);\r",
+							"    pm.collectionVariables.set(\"boardID\", resBody.id);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/boards/?name={{boardNameGenerator}}&key={{apiKey}}&token={{apiToken}}",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"boards",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{boardNameGenerator}}",
+							"description": "required"
+						},
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"description": "required"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"description": "required"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Boards",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if response time is below [500 ms]\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if all boards [name] are [string]\", () => {\r",
+							"    resBody.map(index => {\r",
+							"        pm.expect(index.name).to.be.a(\"string\");\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if all boards [id] are [string]\", () => {\r",
+							"    resBody.map(index => {\r",
+							"        pm.expect(index.id).to.be.a(\"string\");\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/members/me/boards?key={{apiKey}}&token={{apiToken}}&fields=name,url",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"members",
+						"me",
+						"boards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"description": "required"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"description": "required"
+						},
+						{
+							"key": "fields",
+							"value": "name,url"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List on a Board",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function listNameGenerator(){\r",
+							"    const randomNumbers = Math.floor(Math.random() * (1000000 - 1) + 1);\r",
+							"    const randomListName = \"Lista z Postman \" + randomNumbers;\r",
+							"    pm.collectionVariables.set(\"listNameGenerator\", randomListName);\r",
+							"}\r",
+							"listNameGenerator();"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"    pm.expect(pm.response.status).to.be.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if created list [name] is equal to [listNameGenerator] collection variable\", () => {\r",
+							"    const expectedListName = pm.collectionVariables.get(\"listNameGenerator\");\r",
+							"    pm.expect(resBody.name).to.eql(expectedListName);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if created list [id] length is greater than 10 characters\", () => {\r",
+							"    pm.expect(resBody.id).length.to.be.greaterThan(10);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Set created list [id] as a collection variable [listID]\", () => {\r",
+							"    pm.collectionVariables.set(\"listID\", resBody.id)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/boards/{{boardID}}/lists?name={{listNameGenerator}}&key={{apiKey}}&token={{apiToken}}&pos=top",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"boards",
+						"{{boardID}}",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{listNameGenerator}}",
+							"description": "required"
+						},
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"description": "required"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"description": "required"
+						},
+						{
+							"key": "pos",
+							"value": "top"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lists on a Board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if response time is below [500 ms]\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if [id] and [name] values of all lists are [string]\", () => {\r",
+							"    resBody.map(index => {\r",
+							"        pm.expect(index.id).to.be.a(\"string\");\r",
+							"        pm.expect(index.name).to.be.a(\"string\");\r",
+							"    })\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/boards/{{boardID}}/lists?key={{apiKey}}&token={{apiToken}}",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"boards",
+						"{{boardID}}",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"description": "required"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"description": "required"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Card on a List",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function cardNameGenerator(){\r",
+							"    const randomNumbers = Math.floor(Math.random() * (1000000 - 1) + 1);\r",
+							"    const randomCardName = \"Karta z Postman \" + randomNumbers;\r",
+							"    pm.collectionVariables.set(\"cardNameGenerator\", randomCardName);\r",
+							"}\r",
+							"cardNameGenerator();\r",
+							"\r",
+							"function cardDescGenerator(){\r",
+							"    const randomNumbers = Math.floor(Math.random() * (1000000 - 1) + 1);\r",
+							"    const randomCardDesc = \"Testowy opis z Postman \" + randomNumbers;\r",
+							"    pm.collectionVariables.set(\"cardDescGenerator\", randomCardDesc);\r",
+							"}\r",
+							"cardDescGenerator();"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Set [cardID] collection variable\", () => {\r",
+							"    pm.collectionVariables.set(\"cardID\", resBody.id);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if created card [name] and card [desc] is equal to collection variables\", () => {\r",
+							"    pm.expect(resBody.name).to.eql(pm.collectionVariables.get(\"cardNameGenerator\"));\r",
+							"    pm.expect(resBody.desc).to.eql(pm.collectionVariables.get(\"cardDescGenerator\"));\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if [name] and [desc] values are a [string]\", () => {\r",
+							"    pm.expect(resBody.name).to.be.a(\"string\");\r",
+							"    pm.expect(resBody.desc).to.be.a(\"string\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if card [name] and card [description] length are greater than 10 characters\", () => {\r",
+							"    pm.expect(resBody.name).length.to.be.greaterThan(10);\r",
+							"    pm.expect(resBody.desc).length.to.be.greaterThan(10);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/cards?idList={{listID}}&key={{apiKey}}&token={{apiToken}}&name={{cardNameGenerator}}&desc={{cardDescGenerator}}",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"cards"
+					],
+					"query": [
+						{
+							"key": "idList",
+							"value": "{{listID}}",
+							"description": "required"
+						},
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"description": "required"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"description": "required"
+						},
+						{
+							"key": "name",
+							"value": "{{cardNameGenerator}}"
+						},
+						{
+							"key": "desc",
+							"value": "{{cardDescGenerator}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards on a List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/lists/{{listID}}/cards?key={{apiKey}}&token={{apiToken}}",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"lists",
+						"{{listID}}",
+						"cards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"description": "required"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"description": "required"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards on a Board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"console.log(resBody);\r",
+							"pm.test(\"Should verify if [idBoard] value is equal to collection variable [boardID]\", () => {\r",
+							"    pm.expect(resBody[0].idBoard).to.eql(pm.collectionVariables.get(\"boardID\"));\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if [idList] value is equal to collection variable [listID]\", () => {\r",
+							"    pm.expect(resBody[0].idList).to.eql(pm.collectionVariables.get(\"listID\"));\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if [shortLink] value is a [string]\", () => {\r",
+							"    console.log(resBody[0].idBoard);\r",
+							"    console.log(resBody[0].idList);\r",
+							"    console.log(resBody[0].shortLink);\r",
+							"    pm.expect(resBody[0].shortLink).to.be.a(\"string\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/boards/{{boardID}}/cards?key={{apiKey}}&token={{apiToken}}",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"boards",
+						"{{boardID}}",
+						"cards"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify if card [id] value is equal to collection variable [cardID]\", () => {\r",
+							"    pm.expect(resBody.id).to.eql(pm.collectionVariables.get(\"cardID\"));\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify updated card [name] value\", () => {\r",
+							"    pm.expect(resBody.name).to.eql(\"Aktualizacja nazwy karty z Postman\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Should verify updated card [desc] value\", () => {\r",
+							"    pm.expect(resBody.desc).to.eql(\"Aktualizacja opisu karty z Postman\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/cards/{{cardID}}?key={{apiKey}}&token={{apiToken}}&name=Aktualizacja nazwy karty z Postman&desc=Aktualizacja opisu karty z Postman",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"cards",
+						"{{cardID}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"description": "required"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"description": "required"
+						},
+						{
+							"key": "name",
+							"value": "Aktualizacja nazwy karty z Postman"
+						},
+						{
+							"key": "desc",
+							"value": "Aktualizacja opisu karty z Postman"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Card from a List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/cards/{{cardID}}?key={{apiKey}}&token={{apiToken}}",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"cards",
+						"{{cardID}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"description": "required"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"description": "required"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should verify response status code [200 OK]\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlTrello}}/boards/{{boardID}}?key={{apiKey}}&token={{apiToken}}",
+					"host": [
+						"{{baseUrlTrello}}"
+					],
+					"path": [
+						"boards",
+						"{{boardID}}"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{apiKey}}",
+							"description": "required"
+						},
+						{
+							"key": "token",
+							"value": "{{apiToken}}",
+							"description": "required"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "boardID",
+			"value": ""
+		},
+		{
+			"key": "boardNameGenerator",
+			"value": ""
+		},
+		{
+			"key": "listNameGenerator",
+			"value": ""
+		},
+		{
+			"key": "listID",
+			"value": ""
+		},
+		{
+			"key": "cardNameGenerator",
+			"value": ""
+		},
+		{
+			"key": "cardDescGenerator",
+			"value": ""
+		},
+		{
+			"key": "cardID",
+			"value": ""
+		}
+	]
+}
