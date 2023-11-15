@@ -1,0 +1,312 @@
+{
+	"info": {
+		"_postman_id": "fa6ac4ea-5cab-465e-a54a-49ebf4e7d80b",
+		"name": "HTTP BIN - auth verification",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28166921"
+	},
+	"item": [
+		{
+			"name": "Basic Auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test('Should verify if server response status code is [200 OK]', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response time is below [900 ms]', () => {\r",
+							"    pm.expect(pm.response.responseTime).to.below(900);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response size is below [500 B]', () => {\r",
+							"    pm.expect(pm.response.responseSize).to.below(500);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [authenticated] body property is equal [true]', () => {\r",
+							"    pm.expect(resBody.authenticated).to.eql(true);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if response [Content-Type] header exist', () => {\r",
+							"    pm.response.to.have.header('Content-Type');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if response [Content-Type] header value is [application/json]', () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+							"    const resHeaders = pm.response.headers;\r",
+							"    pm.expect(resHeaders.get('Content-Type')).to.eql('application/json');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [user] body property value is equal to [basicAuthUsername] collection variable value', () => {\r",
+							"    resBody = pm.response.json();\r",
+							"    pm.expect(resBody.user).to.eql(pm.collectionVariables.get('basicAuthUsername'));\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [user] body property value is a [string]', () => {\r",
+							"    pm.expect(resBody.user).to.be.a('string');\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{basicAuthPassword}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{basicAuthUsername}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://httpbin.org/basic-auth/user/passwd",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"basic-auth",
+						"user",
+						"passwd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Basic Auth - without auth data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Should verify if server response status code is [401 UNAUTHORIZED]', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(401);\r",
+							"    pm.expect(pm.response.status).to.eql('UNAUTHORIZED');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response time is below [900 ms]', () => {\r",
+							"    pm.expect(pm.response.responseTime).to.below(900);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response size is below [500 B]', () => {\r",
+							"    pm.expect(pm.response.responseSize).to.below(500);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if response headers to not have [Conten-Type] header', () => {\r",
+							"    pm.response.to.not.have.header('Content-Type');\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://httpbin.org/basic-auth/user/passwd",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"basic-auth",
+						"user",
+						"passwd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bearer Token Auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let resBody;\r",
+							"\r",
+							"pm.test('Should verify if server response status code is [200 OK]', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+							"    resBody = pm.response.json();\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response time is below [900 ms]', () => {\r",
+							"    pm.expect(pm.response.responseTime).to.below(900);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response size is below [500 B]', () => {\r",
+							"    pm.expect(pm.response.responseSize).to.below(500);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [authenticated] body property is equal [true]', () => {\r",
+							"    pm.expect(resBody.authenticated).to.eql(true);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if response [Content-Type] header exist', () => {\r",
+							"    pm.response.to.have.header('Content-Type');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if response [Content-Type] header value is [application/json]', () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');\r",
+							"    const resHeaders = pm.response.headers;\r",
+							"    pm.expect(resHeaders.get('Content-Type')).to.eql('application/json');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [token] body property value is equal to [bearerToken] collection variable value', () => {\r",
+							"    resBody = pm.response.json();\r",
+							"    pm.expect(resBody.token).to.eql(pm.collectionVariables.get('bearerToken'));\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if [token] body property value is a [string]', () => {\r",
+							"    pm.expect(resBody.token).to.be.a('string');\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://httpbin.org/bearer",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"bearer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bearer Token Auth - without auth data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Should verify if server response status code is [401 UNAUTHORIZED]', () => {\r",
+							"    pm.expect(pm.response.code).to.eql(401);\r",
+							"    pm.expect(pm.response.status).to.eql('UNAUTHORIZED');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response time is below [900 ms]', () => {\r",
+							"    pm.expect(pm.response.responseTime).to.below(900);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if server response size is below [500 B]', () => {\r",
+							"    pm.expect(pm.response.responseSize).to.below(500);\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if response [Content-Type] header exist', () => {\r",
+							"    pm.response.to.have.header('Content-Type');\r",
+							"})\r",
+							"\r",
+							"pm.test('Should verify if response [Content-Type] header value is [text/html; charset=utf-8]', () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('text/html; charset=utf-8');\r",
+							"    const resHeaders = pm.response.headers;\r",
+							"    pm.expect(resHeaders.get('Content-Type')).to.eql('text/html; charset=utf-8');\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://httpbin.org/bearer",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"bearer"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "bearerToken",
+			"value": "BearerTokenAuthorization123",
+			"type": "string"
+		},
+		{
+			"key": "basicAuthUsername",
+			"value": "user",
+			"type": "string"
+		},
+		{
+			"key": "basicAuthPassword",
+			"value": "passwd",
+			"type": "string"
+		}
+	]
+}
